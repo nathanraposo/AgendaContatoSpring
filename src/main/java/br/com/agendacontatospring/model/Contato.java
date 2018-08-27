@@ -3,6 +3,7 @@ package br.com.agendacontatospring.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class Contato {
     private int id;
@@ -15,7 +16,7 @@ public class Contato {
 
     public Contato(int id, String name) {
         this(name);
-        this.name = name;
+        this.id = id;
     }
 
     public Contato(String name) {
@@ -26,7 +27,7 @@ public class Contato {
     }
 
     public static void contatoRepository(){
-        contatoList = new ArrayList<>( Arrays.asList(new Contato("Nathan"), new Contato("Mario")));
+        contatoList = new ArrayList<>( Arrays.asList(new Contato(1,"Nathan"), new Contato(2,"Mario")));
     }
 
     public int getId() {
@@ -43,5 +44,18 @@ public class Contato {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contato contato = (Contato) o;
+        return id == contato.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
