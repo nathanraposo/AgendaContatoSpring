@@ -3,6 +3,8 @@ package br.com.agendacontatospring.endpoint;
 import br.com.agendacontatospring.model.Contato;
 import br.com.agendacontatospring.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +22,7 @@ import java.util.List;
  *
  * */
 @RestController
-@RequestMapping("contato")
+@RequestMapping("contatos")
 public class ContatoEndpoint {
 
     /*
@@ -30,9 +32,13 @@ public class ContatoEndpoint {
     @Autowired
     private DateUtil dateUtil;
 
-    @RequestMapping(method = RequestMethod.GET, path = "/findAll")
-    public List<Contato> findAll() {
+    public ContatoEndpoint(DateUtil dateUtil) {
+        this.dateUtil = dateUtil;
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<?> findAll() {
         //System.out.println("Data " + dateUtil.formataTipoLocalDateParaDatabase(LocalDateTime.now()));
-        return Arrays.asList(new Contato("Nathan"), new Contato("Mario"));
+        return new ResponseEntity(Contato.contatoList,HttpStatus.OK);
     }
 }
