@@ -2,8 +2,7 @@ package br.com.agendacontatospring.endpoint;
 
 import br.com.agendacontatospring.error.CustomErrorType;
 import br.com.agendacontatospring.model.Contato;
-import br.com.agendacontatospring.util.DateUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import br.com.agendacontatospring.repository.ContatoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,49 +20,39 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("contatos")
 public class ContatoEndpoint {
 
-    /*
-     * Anotação faz parte do framework de injeção de depencias
-     * do spring vai instanciar o objeto.
-     * */
-    @Autowired
-    private DateUtil dateUtil;
+    private final ContatoRepository contatoDao;
 
-    public ContatoEndpoint(DateUtil dateUtil) {
-        this.dateUtil = dateUtil;
+    public ContatoEndpoint(ContatoRepository contatoDao) {
+        this.contatoDao = contatoDao;
     }
 
     @GetMapping
     public ResponseEntity<?> findAll() {
-        //System.out.println("Data " + dateUtil.formataTipoLocalDateParaDatabase(LocalDateTime.now()));
-        return new ResponseEntity(Contato.contatoList, HttpStatus.OK);
+        return new ResponseEntity(contatoDao.findAll(), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<?> getContatoById(@PathVariable("id") int id) {
-        Contato contato = new Contato();
-        contato.setId(id);
-        int index = Contato.contatoList.indexOf(contato);
-        if (index == -1)
+    public ResponseEntity<?> getContatoById(@PathVariable("id") Long id) {
+        Contato contato = contatoDao.findById(id).get();
+        if (contato == null)
             return new ResponseEntity<>(new CustomErrorType("Contato não Encontrado"), HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(Contato.contatoList.get(index), HttpStatus.OK);
+        return new ResponseEntity<>(contato, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody Contato contato) {
-        Contato.contatoList.add(contato);
-        return new ResponseEntity<>(contato, HttpStatus.OK);
+        return new ResponseEntity<>(contatoDao.save(contato), HttpStatus.OK);
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> delete(@RequestBody Contato contato) {
-        Contato.contatoList.remove(contato);
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        contatoDao.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping
     public ResponseEntity<?> update(@RequestBody Contato contato) {
-        Contato.contatoList.remove(contato);
-        Contato.contatoList.add(contato);
+        contatoDao.save(contato);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
