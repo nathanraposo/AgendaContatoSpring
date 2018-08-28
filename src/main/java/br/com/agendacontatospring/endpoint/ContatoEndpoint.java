@@ -28,7 +28,7 @@ public class ContatoEndpoint {
 
     @GetMapping
     public ResponseEntity<?> findAll() {
-        return new ResponseEntity(contatoDao.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(contatoDao.findAll(), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
