@@ -1,6 +1,7 @@
 package br.com.agendacontatospring.endpoint;
 
 import br.com.agendacontatospring.error.CustomErrorType;
+import br.com.agendacontatospring.error.ResourceNotFoundException;
 import br.com.agendacontatospring.model.Contato;
 import br.com.agendacontatospring.repository.ContatoRepository;
 import org.springframework.http.HttpStatus;
@@ -35,13 +36,18 @@ public class ContatoEndpoint {
     public ResponseEntity<?> getContatoById(@PathVariable("id") Long id) {
         Contato contato = contatoDao.findById(id).get();
         if (contato == null)
-            return new ResponseEntity<>(new CustomErrorType("Contato não Encontrado"), HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("Contato não Encontrado pelo id :"+ id);
         return new ResponseEntity<>(contato, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/findByName/{name}")
+    public ResponseEntity<?> findContatosByName(@PathVariable String name){
+        return new ResponseEntity<>(contatoDao.findByNameIgnoreCaseContaining(name),HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody Contato contato) {
-        return new ResponseEntity<>(contatoDao.save(contato), HttpStatus.OK);
+        return new ResponseEntity<>(contatoDao.save(contato), HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "/{id}")
