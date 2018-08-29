@@ -1,12 +1,13 @@
 package br.com.agendacontatospring.endpoint;
 
-import br.com.agendacontatospring.error.CustomErrorType;
 import br.com.agendacontatospring.error.ResourceNotFoundException;
 import br.com.agendacontatospring.model.Contato;
 import br.com.agendacontatospring.repository.ContatoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 /*
  * O Endpoint é o ponto final onde os usuarios vão acessar a API
@@ -34,15 +35,14 @@ public class ContatoEndpoint {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> getContatoById(@PathVariable("id") Long id) {
-        Contato contato = contatoDao.findById(id).get();
-        if (contato == null)
-            throw new ResourceNotFoundException("Contato não Encontrado pelo id :"+ id);
+        verificaSeExisteContato(id);
+        Optional<Contato> contato = contatoDao.findById(id);
         return new ResponseEntity<>(contato, HttpStatus.OK);
     }
 
     @GetMapping(path = "/findByName/{name}")
-    public ResponseEntity<?> findContatosByName(@PathVariable String name){
-        return new ResponseEntity<>(contatoDao.findByNameIgnoreCaseContaining(name),HttpStatus.OK);
+    public ResponseEntity<?> findContatosByName(@PathVariable String name) {
+        return new ResponseEntity<>(contatoDao.findByNameIgnoreCaseContaining(name), HttpStatus.OK);
     }
 
     @PostMapping
@@ -52,13 +52,21 @@ public class ContatoEndpoint {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
+        verificaSeExisteContato(id);
         contatoDao.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping
     public ResponseEntity<?> update(@RequestBody Contato contato) {
+        verificaSeExisteContato(contato.getId());
         contatoDao.save(contato);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private void verificaSeExisteContato(Long id) {
+        Optional<Contato> student = contatoDao.findById(id);
+        if (!student.isPresent())
+            throw new ResourceNotFoundException("Contato não Encontrado para ID: " + id);
     }
 }
