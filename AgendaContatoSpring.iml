@@ -87,5 +87,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-tx:5.0.8.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aspects:5.0.8.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.postgresql:postgresql:42.2.4" level="project" />
+    <orderEntry type="library" name="Maven: com.jfoenix:jfoenix:8.0.4" level="project" />
+    <orderEntry type="library" name="SupremeMdiWindow-1.0-SNAPSHOT" level="project" />
   </component>
 </module>

@@ -1,6 +1,7 @@
 package br.com.agendacontatospring.controllers;
 
 import br.com.agendacontatospring.Main;
+import br.com.agendacontatospring.view.EditContato;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -44,6 +45,6 @@ public class EditContatoController implements Initializable {
 
 
     public void fechaTela() {
-        Main.getStage().close();
+        EditContato.getStage().close();
     }
 }
