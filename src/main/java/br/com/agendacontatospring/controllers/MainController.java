@@ -18,30 +18,8 @@ import java.util.ResourceBundle;
 public class MainController implements Initializable {
 
 
-    @FXML
-    private TextField tf_pesquisar;
-
-    @FXML
-    private Button bt_buscar;
-
-    @FXML
-    private Button bt_novo;
-
-    @FXML
-    private TableView<?> table_contatos;
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        bt_novo.setOnMouseClicked((MouseEvent e) -> {
-            try {
-                EditContato editContato = new EditContato();
-                editContato.start(new Stage());
-                fechaTela();
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-        });
 
     }
 
@@ -49,10 +27,4 @@ public class MainController implements Initializable {
         Main.getStage().close();
     }
 
-
-    /*@FXML
-    private void btnNovo(ActionEvent event) {
-        //stageManager.switchScene(FxmlView.USER);
-
-    }*/
 }

@@ -1,11 +1,12 @@
 package br.com.agendacontatospring.model;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 public class Contato extends AbstractEntity {
 
-    //@Column(name = "nome_contato")
+    @NotEmpty
     private String name;
 
     public String getName() {

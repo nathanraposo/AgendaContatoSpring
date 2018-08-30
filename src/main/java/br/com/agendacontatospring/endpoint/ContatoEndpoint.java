@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.Optional;
 
 /*
@@ -46,7 +48,7 @@ public class ContatoEndpoint {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody Contato contato) {
+    public ResponseEntity<?> save(@Valid @RequestBody Contato contato) {
         return new ResponseEntity<>(contatoDao.save(contato), HttpStatus.CREATED);
     }
 
